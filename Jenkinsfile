@@ -39,8 +39,7 @@ pipeline
        {
            steps
           {
-           input 'need approval from manager'
-           deploy adapters: [tomcat9(credentialsId: '3ffa97a9-5c9c-465e-be1e-b31a7f5b2d0a', path: '', url: 'http://172.31.43.171:8080')], contextPath: 'prodapp', war: '**/*.war'
+                   deploy adapters: [tomcat9(credentialsId: '3ffa97a9-5c9c-465e-be1e-b31a7f5b2d0a', path: '', url: 'http://172.31.43.171:8080')], contextPath: 'prodapp', war: '**/*.war'
           } 
        }
       
