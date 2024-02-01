@@ -1,0 +1,84 @@
+node('built-in')
+{
+    
+    stage('ContonuousDownload')
+    {
+        
+        try
+        {
+            git 'https://github.com/srikanth9691/msrrepository.git'
+        }
+        catch(Exception e1)
+        {
+             mail bcc: '', body: 'jenkins download failed', cc: '', from: '', replyTo: '', subject: 'jenkins ', to: 'srikanth@gmail.comjenkins'
+        }
+        
+    }
+        
+    stage('continuousBuild')
+    {
+        
+        
+        try
+        {
+            sh 'mvn package'
+        }
+        catch(Exception e2)
+        {
+             mail bcc: '', body: 'artifact build failed', cc: '', from: '', replyTo: '', subject: 'jenkins ', to: 'build.admin@gmail.com' 
+        }
+              
+        
+                
+    }
+    stage('continuousDeployment')
+    {
+        
+        
+        
+        try
+        {
+            deploy adapters: [tomcat9(credentialsId: 'cbc933d1-a8ae-48a1-a14e-cc3a5f0df3d0', path: '', url: 'http://172.31.19.226:8080')], contextPath: 'testapp30', war: '**/*.war'
+        }
+        catch(Exception e3)
+        {
+             mail bcc: '', body: 'deployment failed in tomcat9', cc: '', from: '', replyTo: '', subject: 'tomcat', to: 'tomcat.adimn@gmail.com'  
+        }
+                    
+        
+    }
+    stage('continuousTesting')
+    {
+        
+        
+        try
+        {
+            git 'https://github.com/intelliqittrainings/FunctionalTesting.git'
+            sh 'java -jar /var/lib/jenkins/workspace/scriptedpipeline3/testing.jar'
+        }
+        catch(Exception e4)
+        {
+            mail bcc: '', body: 'selenium scripts failed', cc: '', from: '', replyTo: '', subject: 'tomcat', to: 'test.adimn@gmail.com'
+        }
+          
+    }
+    stage('continuousDelivery')
+    {
+        
+        
+        try
+        {
+            deploy adapters: [tomcat9(credentialsId: 'cbc933d1-a8ae-48a1-a14e-cc3a5f0df3d0', path: '', url: 'http://172.31.30.27:8080')], contextPath: 'prodapp30', war: '**/*.war'  
+        }
+        catch(Exception e5)
+        {
+              mail bcc: '', body: 'deployment failed in tomcat9', cc: '', from: '', replyTo: '', subject: 'tomcat', to: 'tomcat.adimn@gmail.com' 
+        }
+                    
+                
+         
+       
+        
+        
+    }
+}
